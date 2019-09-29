@@ -1,9 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import SeasonDisplay from "./SeasonDisplay";
 import Spinner from "./Spinner";
+import useLocation from "./useLocation";
 
-class App extends React.Component {
+//With Hooks
+const App = () => {
+  const [lat, errMsg] = useLocation();
+
+  let content;
+
+  if (errMsg) {
+    content = <div>Error: {errMsg}</div>;
+  } else if (lat) {
+    content = <SeasonDisplay lat={lat} />;
+  } else {
+    content = <Spinner msg="Please accept location request" />;
+  }
+
+  return <div className="border red">{content}</div>;
+};
+
+//With Class
+/* class App extends React.Component {
   state = { lat: null, errorMsg: "" };
 
   componentDidMount() {
@@ -28,6 +47,6 @@ class App extends React.Component {
   render() {
     return <div className="border red">{this.renderContent()}</div>;
   }
-}
+} */
 
 ReactDOM.render(<App />, document.querySelector("#root"));
